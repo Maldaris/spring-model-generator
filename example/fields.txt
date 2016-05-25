@@ -1,0 +1,4 @@
+String firstName
+String lastName
+String studentID
+Boolean isActive
