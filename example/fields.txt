@@ -1,4 +1,5 @@
-String firstName
-String lastName
-String studentID
-Boolean isActive
+String firstName rs_firstname
+String lastName rs_lastname
+String studentID spriden_pidm
+Boolean isActive rs_isactive
+Integer credits rs_credits
