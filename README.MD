@@ -17,6 +17,3 @@ Note: You need to supply it with at least one level of a classpath. Ex: `somepac
 Currently, Strings, Booleans, Emails (represented as strings) and Integers are supported. 
 Appropriate validation decorators are added per type.
 
-## TODO
-
-* Add support for JDBC ResultSet consumer based on field names in database, as third part in row of plaintext file.
