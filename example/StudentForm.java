@@ -85,11 +85,9 @@ public class StudentForm{
             return new StudentForm(
                rs.getBoolean("rs_isactive"),
                rs.getInteger("rs_credits"),               ,
-               new String[]{
-                  rs.getString("rs_firstname"),
-                  rs.getString("rs_lastname"),
-                  rs.getString("spriden_pidm")
-               }
+               rs.getString("rs_firstname"),
+               rs.getString("rs_lastname"),
+               rs.getString("spriden_pidm")
             );
          }
       };

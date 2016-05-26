@@ -179,16 +179,14 @@ if (jdbcConsumer === true) {
             out += ',\n';
     }
     if (strings.length !== 0) {
-        out += "," + tab.mul(5) + ',\n'+ tab.mul(5) + 'new String[]{\n';
+        out += "," + tab.mul(5) + ',\n';
     }
     fs.appendFileSync(filepath, out);
     out = "";
     for (var i = 0; i < strings.length; i++) {
-        out += tab.mul(6) + "rs.getString(\"" + strings[i][2] + "\")";
+        out += tab.mul(5) + "rs.getString(\"" + strings[i][2] + "\")";
         if (i !== strings.length - 1)
             out += ",\n";
-        else
-            out += "\n"+tab.mul(5) +"}";
     }
     out += "\n" + tab.mul(4) + ");\n" + tab.mul(3) +"}\n"+ tab.mul(2) + "};\n" +tab+"}\n";
 }
