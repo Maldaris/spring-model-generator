@@ -12,25 +12,36 @@ String.prototype.mul = function(n) {
     }
     return ret;
 };
-
 var out = "";
 var tab = "   ";
-var args, jdbcConsumer;
+var args, specifyOutputDir, jdbcConsumer;
 if (process.argv.length < 4) {
-    console.log("usage: node modelgen.js <classpath> <fields file> <generate jdbcConsumer>\n");
+    console.log("usage: node modelgen.js <classpath> <fields file> <output directory> <generate jdbcConsumer>\n");
     process.exit(0);
 } else if (process.argv.length === 4) {
     args = process.argv.splice(2, 2);
     jdbcConsumer = false;
-} else {
+} else if (process.argv.length === 5) {
     args = process.argv.splice(2, 3);
-    jdbcConsumer = true;
+    specifyOutputDir = true;
+    jdbcConsumer = false;
+} else {
+  args = process.argv.splice(2, 4);
+  specifyOutputDir = true;
+  jdbcConsumer = true;
 }
 
-var classname = args[0].split(".").last();
 
-if (fs.existsSync(classname + ".java")) {
-    fs.writeFileSync(classname + ".java", "", {
+var classname = args[0].split(".").last();
+var filepath;
+if(specifyOutputDir === true){
+  filepath = require('path').join(args[2], classname+".java");
+} else {
+  filepath = classname +".java";
+}
+
+if (fs.existsSync(filepath)) {
+    fs.writeFileSync(filepath, "", {
         flag: "w+"
     });
 }
@@ -49,7 +60,7 @@ out += "import org.hibernate.validator.constraints.NotBlank;\n";
 out += "import org.hibernate.validator.constraints.Email;\n";
 out += "\npublic class " + args[0].split(".").last() + "{\n";
 
-fs.writeFileSync(classname + ".java", out, {
+fs.writeFileSync(filepath, out, {
     flag: "a+"
 });
 out = "";
@@ -67,7 +78,7 @@ for (var i = 0; i < fields.length; i++) {
     out += tab + decorators + tab + type + " " + fields[i][1] + ";\n\n";
 }
 
-fs.appendFileSync(classname + ".java", out, {
+fs.appendFileSync(filepath, out, {
     flag: "a+"
 });
 out = "";
@@ -93,7 +104,7 @@ for (var i = 0; i < fields.length; i++) {
     out += tab + "}\n";
 }
 
-fs.appendFileSync(classname + ".java", out, {
+fs.appendFileSync(filepath, out, {
     flag: "a+"
 });
 out = "";
@@ -136,7 +147,7 @@ for (var i = 0; i < strings.length; i++) {
 }
 out += tab + "}\n";
 
-fs.appendFileSync(classname + ".java", out);
+fs.appendFileSync(filepath, out);
 out = "";
 
 if (jdbcConsumer === true) {
@@ -158,7 +169,7 @@ if (jdbcConsumer === true) {
     if (ints.length !== 0) {
         out +=',\n';
     }
-    fs.appendFileSync(classname + ".java", out);
+    fs.appendFileSync(filepath, out);
     out = "";
     for (var i = 0; i < ints.length; i++) {
         if (i !== 0)
@@ -170,7 +181,7 @@ if (jdbcConsumer === true) {
     if (strings.length !== 0) {
         out += "," + tab.mul(5) + ',\n'+ tab.mul(5) + 'new String[]{\n';
     }
-    fs.appendFileSync(classname + ".java", out);
+    fs.appendFileSync(filepath, out);
     out = "";
     for (var i = 0; i < strings.length; i++) {
         out += tab.mul(6) + "rs.getString(\"" + strings[i][2] + "\")";
@@ -182,4 +193,4 @@ if (jdbcConsumer === true) {
     out += "\n" + tab.mul(4) + ");\n" + tab.mul(3) +"}\n"+ tab.mul(2) + "};\n" +tab+"}\n";
 }
 out += "}\n";
-fs.appendFileSync(classname + ".java", out);
+fs.appendFileSync(filepath, out);
